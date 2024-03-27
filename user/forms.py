@@ -3,9 +3,11 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User
 
 class CustomUserCreationForm(UserCreationForm):
+    student_id = forms.CharField(max_length=10, required=True, help_text="Enter your student ID.")
+    name = forms.CharField(max_length=100, required=True, help_text="Enter your name.")
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email', 'student_id', 'name')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
