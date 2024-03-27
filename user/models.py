@@ -5,6 +5,9 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
             raise ValueError('Users must have an email address')
+        
+        if not email.endswith('@g.skku.edu'):
+            raise ValueError('Email must be a SKKU email address')
 
         user = self.model(
             email=self.normalize_email(email),
