@@ -2,19 +2,122 @@
 <html>
 <head>
     <title>Login</title>
+    {% load static %}
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .header img {
+            width: 200px;
+            height: auto;
+        }
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            margin-top: -50px;
+            padding-top: 30px;
+        }
+        .login-box {
+            width: 600px; /* 로그인 박스의 너비 */
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        .title {
+            color: #66cc00;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #333;
+            font-size: smaller;
+            margin-bottom: 20px;
+        }
+        form {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: auto 1fr;
+        }
+        label {
+            grid-column: 1;
+            text-align: right;
+            margin-right: 10px;
+            align-self: center;
+        }
+        input, .btn-login, a.btn-register {
+            grid-column: 2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-footer {
+            grid-column: 2; /* 버튼을 입력 필드와 같은 열에 배치 */
+            display: flex; /* 버튼들을 수평으로 배치 */
+            justify-content: space-between; /* 버튼 사이에 공간을 균등하게 배분 */
+            margin-top: 10px;
+        }
+        .btn-login {
+            background-color: #66cc00;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            width: 48%; /* 버튼의 너비를 조정해 수평 배치 */
+            box-sizing: border-box;
+        }
+        a.btn-register {
+            font-size: 0.8em;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            padding: 10px;
+            width: 48%; /* 버튼의 너비를 조정해 수평 배치 */
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label for="username">Username (Email):</label>
-        <input type="text" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Log in</button>
-    </form>
-    <a href="{% url 'register' %}">Register</a>
+    <div class="header">
+        <img src="{% static 'images/skkulogo.jpg' %}" alt="School Emblem"/>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <h2 class="title">성균관대 인자셔틀 예약 서비스</h2>
+            <div class="subtitle">SKKU Campus Shuttle Bus Reservation</div>
+            <div class="login-box">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="username">ID (Email):</label>
+                    <input type="text" name="username" required>
+                    <br>
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" required>
+                    <div class="form-footer">
+                        <button type="submit" class="btn-login">Log in</button>
+                        <a href="{% url 'register' %}" class="btn-register">Register</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
