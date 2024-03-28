@@ -9,43 +9,48 @@
             padding: 0;
             height: 100%;
             background-color: #ffffff;
+            background-image: url('{% static 'images/library.JPG' %}');
+            background-size: 100% 100%;
             font-family: Arial, sans-serif;
         }
         .header {
             position: absolute;
             top: 0;
             left: 0;
+            background-color: transparent;
         }
         .header img {
-            width: 200px;
-            height: auto;
+            width: auto;
+            height: 100px;
         }
         .main-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             height: 100vh;
         }
-        .container {
+        .title-container {
             text-align: center;
-            margin-top: -50px;
-            padding-top: 30px;
+            margin-top: 50px;
         }
         .login-box {
-            width: 600px; /* 로그인 박스의 너비 */
-            background-color: white;
-            padding: 20px;
+            width: 600px;
+            background-color: rgba(255, 255, 255, 0.5); /* 투명도 조절 */
+            padding: 60px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             display: inline-block;
+            margin-bottom: 100px; /* 하단 여백 조정 */
         }
         .title {
-            color: #66cc00;
+            color: rgb(3, 84, 0);
             margin-bottom: 5px;
+            font-size: 2em;
         }
         .subtitle {
             color: #333;
-            font-size: smaller;
+            font-size: 1em;
             margin-bottom: 20px;
         }
         form {
@@ -68,9 +73,9 @@
             box-sizing: border-box;
         }
         .form-footer {
-            grid-column: 2; /* 버튼을 입력 필드와 같은 열에 배치 */
-            display: flex; /* 버튼들을 수평으로 배치 */
-            justify-content: space-between; /* 버튼 사이에 공간을 균등하게 배분 */
+            grid-column: 2;
+            display: flex;
+            justify-content: space-between;
             margin-top: 10px;
         }
         .btn-login {
@@ -79,7 +84,7 @@
             border: none;
             cursor: pointer;
             padding: 10px;
-            width: 48%; /* 버튼의 너비를 조정해 수평 배치 */
+            width: 48%;
             box-sizing: border-box;
         }
         a.btn-register {
@@ -90,33 +95,33 @@
             display: block;
             text-align: center;
             padding: 10px;
-            width: 48%; /* 버튼의 너비를 조정해 수평 배치 */
+            width: 48%;
             box-sizing: border-box;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="{% static 'images/skkulogo.jpg' %}" alt="School Emblem"/>
+        <img src="{% static 'images/skkulogo1.png' %}" alt="School Emblem"/>
     </div>
     <div class="main-container">
-        <div class="container">
+        <div class="title-container">
             <h2 class="title">성균관대 인자셔틀 예약 서비스</h2>
             <div class="subtitle">SKKU Campus Shuttle Bus Reservation</div>
-            <div class="login-box">
-                <form method="post">
-                    {% csrf_token %}
-                    <label for="username">ID (Email):</label>
-                    <input type="text" name="username" required>
-                    <br>
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" required>
-                    <div class="form-footer">
-                        <button type="submit" class="btn-login">Log in</button>
-                        <a href="{% url 'register' %}" class="btn-register">Register</a>
-                    </div>
-                </form>
-            </div>
+        </div>
+        <div class="login-box">
+            <form method="post">
+                {% csrf_token %}
+                <label for="username">ID (Email):</label>
+                <input type="text" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
+                <div class="form-footer">
+                    <button type="submit" class="btn-login">Log in</button>
+                    <a href="{% url 'register' %}" class="btn-register">Register</a>
+                </div>
+            </form>
         </div>
     </div>
 </body>
