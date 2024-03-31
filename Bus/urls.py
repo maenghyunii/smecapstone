@@ -1,8 +1,11 @@
-# urls.py
 from django.urls import path
-from .views import home  # 'home' 뷰 함수를 가져옵니다.
+from .views import home
+from . import views
 
 urlpatterns = [
     # 기존 URL 패턴들...
-    path('home/', home, name='home'),  # 'home' URL 패턴 추가
+    path('home/', home, name='home'),  # 기존 'home' URL 패턴
+    path('route_selection/', views.route_selection, name='route_selection'),
+    path('toSuwon/', views.toSuwon, name='toSuwon'),
+    path('toSeoul/', views.toSeoul, name='toSeoul'),
 ]
