@@ -19,5 +19,3 @@ class Reservation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     reservation_time = models.DateTimeField(auto_now_add=True)
-
-# Bus 및 user 모델 수정 필요 : 구현 방법 회의 후 결정 필요
