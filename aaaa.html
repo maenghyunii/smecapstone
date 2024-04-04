@@ -38,8 +38,10 @@
         }
         .seat {
             width: 40px;
-            height: 40px;
-            background-color: #fff;
+            height: 43px;
+            background-image: url('assets/seat_empty.png');
+            background-size: cover;
+            background-position: center;
             margin-right: 5px;
             display: flex;
             justify-content: center;
@@ -48,11 +50,36 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
-            border: 1px solid #ccc;
         }
-        .seat.selected {
-            background-color: #ccc;
-            color: #000;
+        .seat_selected {
+            width: 40px;
+            height: 43px;
+            background-image: url('assets/seat_selected.png');
+            background-size: cover;
+            background-position: center;
+            margin-right: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .seat_booked {
+            width: 40px;
+            height: 43px;
+            background-image: url('assets/seat_booked.png');
+            background-size: cover;
+            background-position: center;
+            margin-right: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            cursor: not-allowed; /* 변경된 부분: 클릭 불가능하도록 */
+            font-size: 14px;
+            font-weight: bold;
         }
         .empty-space {
             width: 10px;
@@ -91,9 +118,10 @@
     <button id="submit-button">선택 완료</button>
 
     <script>
-        var totalSeats = 44;
+        var totalSeats = 45;
         var selectedSeats = [];
         var maxSeatsPerPerson = 4;
+        var reservedSeats = [5, 10, 15];
 
         var seatMap = document.querySelector('.seat-map');
         var remainingSeatsElement = document.getElementById('remaining-seats');
@@ -102,32 +130,64 @@
 
         updateRemainingSeats();
 
-        for (var i = 1; i <= 11; i++) {
+        for (var i = 1; i <= 10; i++) {
             var rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
+            
+            var seatNumber1 = (i - 1) * 4 + 1;
+            var seatDiv1 = createSeatDiv(seatNumber1);
+            rowDiv.appendChild(seatDiv1);
 
-            for (var j = 1; j <= 4; j++) {
-                var seatNumber = (i - 1) * 4 + j;
-                var seatDiv = createSeatDiv(seatNumber);
-                rowDiv.appendChild(seatDiv);
-            }
+            var seatNumber2 = (i - 1) * 4 + 2;
+            var seatDiv2 = createSeatDiv(seatNumber2);
+            rowDiv.appendChild(seatDiv2);
+
+            var emptyDiv = createEmptyDiv(46, 43);
+            rowDiv.appendChild(emptyDiv);
+            
+            var seatNumber3 = (i - 1) * 4 + 3;
+            var seatDiv3 = createSeatDiv(seatNumber3);
+            rowDiv.appendChild(seatDiv3);
+            var seatNumber4 = (i - 1) * 4 + 4;
+            var seatDiv4 = createSeatDiv(seatNumber4);
+            rowDiv.appendChild(seatDiv4);
 
             seatMap.appendChild(rowDiv);
         }
+        var rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+            
+        var seatDiv1 = createSeatDiv(41);
+        rowDiv.appendChild(seatDiv1);
+        var seatDiv2 = createSeatDiv(42);
+        rowDiv.appendChild(seatDiv2);    
+        var seatDiv3 = createSeatDiv(43);
+        rowDiv.appendChild(seatDiv3);
+        var seatDiv4 = createSeatDiv(44);
+        rowDiv.appendChild(seatDiv4);
+        var seatDiv5 = createSeatDiv(45);
+        rowDiv.appendChild(seatDiv5);
+        seatMap.appendChild(rowDiv);
 
         function createSeatDiv(seatNumber) {
             var seatDiv = document.createElement('div');
             seatDiv.classList.add('seat');
             seatDiv.textContent = seatNumber;
             seatDiv.addEventListener('click', function() {
-                if (seatDiv.classList.contains('selected')) {
-                    seatDiv.classList.remove('selected');
+                if (reservedSeats.includes(seatNumber)) {
+                    alert('이 좌석은 이미 예약되었습니다.');
+                    return; // 변경된 부분: 이미 예약된 좌석은 클릭할 수 없도록 함
+                }
+                if (seatDiv.classList.contains('seat_selected')) {
+                    seatDiv.classList.remove('seat_selected');
+                    seatDiv.classList.add('seat');
                     selectedSeats = selectedSeats.filter(function(seat) {
                         return seat !== seatNumber;
                     });
                 } else {
                     if (selectedSeats.length < maxSeatsPerPerson) {
-                        seatDiv.classList.add('selected');
+                        seatDiv.classList.remove('seat');
+                        seatDiv.classList.add('seat_selected');
                         selectedSeats.push(seatNumber);
                     } else {
                         alert('인당 최대 ' + maxSeatsPerPerson + '개의 좌석만 선택할 수 있습니다.');
@@ -136,7 +196,18 @@
                 updateRemainingSeats();
                 updateSelectedSeats();
             });
+            if (reservedSeats.includes(seatNumber)) {
+                seatDiv.classList.remove('seat');
+                seatDiv.classList.add('seat_booked');
+            }
             return seatDiv;
+        }
+
+        function createEmptyDiv(width, height) {
+            var emptyDiv = document.createElement('div');
+            emptyDiv.style.width = width + 'px';
+            emptyDiv.style.height = height + 'px';
+            return emptyDiv;
         }
 
         function updateRemainingSeats() {
@@ -151,6 +222,7 @@
         submitButton.addEventListener('click', function() {
             if (selectedSeats.length > 0) {
                 alert('예약이 정상적으로 처리되었습니다.');
+                window.location.href = "pseudo_home.html";
             } else {
                 alert('좌석을 선택해주세요.');
             }
