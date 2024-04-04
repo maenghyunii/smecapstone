@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>인자셔틀 예약 서비스</title>
+    {% load static %}
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: white;
+            background-image: url('{% static 'images/myeongryun.JPG' %}');
+            background-size: 100% 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: transparent;
+        }
+        .header img {
+            width: auto;
+            height: 100px;
+            margin-right: 20px;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between; /* 변경: space-around -> space-between */
+            align-items: center;
+            height: calc(100% - 140px);
+            padding: 20px; /* 추가: 좌우 패딩으로 버튼들을 중앙에서 멀어지게 함 */
+        }
+        form {
+            height: 30%; /* 박스 높이 더 줄임 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 40%; /* 폼 너비 명시적 지정으로 위치 조정에 도움 */
+        }
+        button {
+            width: 100%; /* 박스 너비 조정 */
+            height: 100%;
+            background-color: #ffdd007d;
+            color: white;
+            border: 2px solid #ffdd00;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 28px; /* 글자 크기 더 증가 */
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 바퀴 크기 조정 */
+        button::before, button::after {
+            content: '';
+            position: absolute;
+            bottom: -25px; /* 위치 조정 */
+            width: 40px; /* 크기 조정 */
+            height: 40px; /* 크기 조정 */
+            border-radius: 50%;
+            background-color: #333;
+        }
+        button::before {
+            left: 25%;
+            transform: translateX(-50%);
+        }
+        button::after {
+            right: 25%;
+            transform: translateX(50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{% static 'images/skkulogo1.png' %}" alt="School Emblem">
+    </div>
+    <div class="main-container">
+        <form action="{% url 'toSuwon' %}" method="post" style="margin-right: auto;"> <!-- 오른쪽으로 이동을 위해 자동 마진 조정 -->
+            {% csrf_token %}
+            <input type="hidden" name="route_direction" value="toSuwon">
+            <button type="submit">인사캠 출발 - 자과캠 도착</button>
+        </form>
+        
+        <form action="{% url 'toSeoul' %}" method="post" style="margin-left: auto;"> <!-- 오른쪽으로 이동을 위해 자동 마진 조정 -->
+            {% csrf_token %}
+            <input type="hidden" name="route_direction" value="toSeoul">
+            <button type="submit">자과캠 출발 - 인사캠 도착</button>
+        </form>
+    </div>
+</body>
+</html>
