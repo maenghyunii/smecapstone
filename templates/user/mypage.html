@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>마이페이지</title>
+    {% load static %}
+    <style>
+        /* 스타일링 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px;
+            background-color: rgba(25, 230, 7, 0.774);
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>안녕하세요, {{ user.name }} 님!</h1>
+        <a href="{% url 'home' %}">예약하러 가기</a>
+    </div>
+    <div>
+        <h2>예약 내역</h2>
+    </div>
+    <div id="reservationList">
+        {% if reservations %}
+            <ul>
+                {% for reservation in reservations %}
+                    <li>{{ reservation.seat.schedule.bus.name }} - {{ reservation.seat.schedule.departure_time }} - {{ reservation.seat.schedule.arrival_time }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>예약 내역이 없습니다.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
