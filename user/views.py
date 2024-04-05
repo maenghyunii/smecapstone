@@ -31,7 +31,7 @@ def send_activation_email(user, request):
     activation_link = "{0}/activate/{1}/{2}/".format(request.build_absolute_uri('/'), uid, token)
 
     subject = 'Activate your account'
-    message = 'Hi, please click the link to activate your account: {0}'.format(activation_link)
+    message = '계정을 생성하려면 다음 링크를 클릭하세요: {0}'.format(activation_link)
     email_from = 'note0315note@gmail.com'
     recipient_list = [user.email,]
     send_mail(subject, message, email_from, recipient_list)
