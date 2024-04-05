@@ -8,6 +8,8 @@ from django.utils.encoding import force_bytes
 from .models import User
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from Bus.models import Reservation
 
 def register(request):
     if request.method == 'POST':
@@ -64,3 +66,13 @@ def user_login(request):
             return HttpResponse("Invalid login details.")
     else:
         return render(request, 'user/login.html')
+    
+@login_required
+def mypage(request):
+    user = request.user
+    reservations = Reservation.objects.filter(user=user)
+    context = {
+        'user': user,
+        'reservations': reservations,
+    }
+    return render(request, 'user/mypage.html', context)

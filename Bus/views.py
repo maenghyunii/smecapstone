@@ -1,6 +1,10 @@
-from django.shortcuts import render, redirect
-from .models import Bus
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Bus, Schedule, Seat
+from .forms import ReservationForm
 from django.views.decorators.http import require_POST
+import datetime
+from datetime import date, timedelta
+
 
 def home(request):
     return render(request, 'Bus/home.html')
@@ -14,9 +18,17 @@ def route_selection(request):
         return redirect('toSeoul')
 
 def toSuwon(request):
-    # 수원으로 가는 버스 예약 페이지를 렌더링합니다.
-    return render(request, 'Bus/toSuwon.html')
+    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+
+    context = {
+        'dates': dates,
+    }
+    return render(request, 'Bus/toSuwon.html', context)
 
 def toSeoul(request):
-    # 서울로 가는 버스 예약 페이지를 렌더링합니다.
-    return render(request, 'Bus/toSeoul.html')
+    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+
+    context = {
+        'dates': dates,
+    }
+    return render(request, 'Bus/toSeoul.html', context)
