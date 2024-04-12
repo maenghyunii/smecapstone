@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User
 
 class CustomUserCreationForm(UserCreationForm):
-    student_id = forms.CharField(max_length=10, required=True, help_text="Enter your student ID.")
+    student_id = forms.CharField(max_length=15, required=True, help_text="Enter your student ID.")
     name = forms.CharField(max_length=100, required=True, help_text="Enter your name.")
     class Meta:
         model = User
