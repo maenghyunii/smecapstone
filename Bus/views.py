@@ -18,7 +18,7 @@ def route_selection(request):
         return redirect('toSeoul')
 
 def toSuwon(request):
-    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
 
     context = {
         'dates': dates,
@@ -26,7 +26,7 @@ def toSuwon(request):
     return render(request, 'Bus/toSuwon.html', context)
 
 def toSeoul(request):
-    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
 
     context = {
         'dates': dates,

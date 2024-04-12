@@ -36,8 +36,8 @@
     </style>
 </head>
 <body>
-    <h1>서울로 가는 버스입니다!</h1>
-    <p>서울행 버스 예약 페이지에 오신 것을 환영합니다.</p>
+    <h1>인사캠으로 가는 버스입니다!</h1>
+    <p>인사캠행 버스 예약 페이지에 오신 것을 환영합니다.</p>
 
     <div id="wrapper">
         <div id='calendar'></div>
@@ -47,6 +47,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
+            var validDates = [
+                {% for date in dates %}
+                '{{ date|date:"Y-m-d" }}',
+                {% endfor %}
+            ]; // 예약 가능한 날짜들을 배열로 저장
+    
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 events: [
@@ -59,16 +65,11 @@
                         textColor: '#ffffff'
                     },
                     {% endfor %}
-                    // 예약 가능한 날짜 이벤트
                 ],
                 dateClick: function(info) {
-                    var clickedDate = new Date(info.dateStr);
-                    var dayOfWeek = clickedDate.getDay();
-
-                    // 주말(토요일: 6, 일요일: 0) 선택 방지
-                    if(dayOfWeek === 0 || dayOfWeek === 6) {
-                        alert('주말은 예약할 수 없습니다.');
-                        return; // 주말일 경우 여기서 함수 종료
+                    if (!validDates.includes(info.dateStr)) {
+                        alert('예약 가능 일자가 아닙니다.');
+                        return; // 예약 가능하지 않은 날짜 클릭 시 함수 종료
                     }
                     displayDepartureTimes(info.dateStr);
                 },
@@ -81,21 +82,21 @@
             });
             calendar.render();
         });
-
+    
         function displayDepartureTimes(clickedDate) {
             // 기본 출발 시간 배열
             var departureTimes = ['07:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:15'];
             var clickedDateTime = new Date(clickedDate);
             var isFriday = clickedDateTime.getDay() === 5; // JS에서 일요일은 0, 금요일은 5
-
+    
             // 금요일일 경우 7:00 출발을 8:00으로 변경
             if(isFriday) {
                 departureTimes[0] = '08:00';
             }
-
+    
             var departureTimesHtml = '<ul>';
             var now = new Date();
-
+    
             departureTimes.forEach(function(time) {
                 var departureDateTime = new Date(clickedDate + 'T' + time);
                 if(departureDateTime < now) {
@@ -105,16 +106,16 @@
                     departureTimesHtml += `<li onclick="reserveBus('${time}')">${time} 출발</li>`;
                 }
             });
-
+    
             departureTimesHtml += '</ul>';
             document.getElementById('departureTimes').innerHTML = departureTimesHtml;
         }
-
+    
         function reserveBus(time) {
             alert("선택한 시간: " + time + "\n여기서 예약 처리 로직을 추가합니다.");
             // 예약 페이지로 이동하거나, 예약 관련 모달을 여는 등의 로직을 구현
             // 예시: window.location.href = 'reservation_page.html?time=' + time;
         }
     </script>
-</body>
+    </body>
 </html>

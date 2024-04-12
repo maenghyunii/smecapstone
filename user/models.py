@@ -33,15 +33,15 @@ class User(AbstractBaseUser):
         unique=True,
     )
     name = models.CharField(max_length=100, blank=False)  # 이름 필드 추가
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     no_show_count = models.IntegerField(default=0)  # 노쇼 횟수
     last_no_show_date = models.DateField(null=True, blank=True)  # 마지막 노쇼 날짜
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'  # 이제 학번(사번)이 로그인 식별자가 됩니다.
-    REQUIRED_FIELDS = ['student_id', 'name']  # 회원가입 시 이메일과 이름도 필수로 입력 받습니다.
+    USERNAME_FIELD = 'student_id'  # 이제 학번(사번)이 로그인 식별자가 됩니다.
+    REQUIRED_FIELDS = ['email', 'name']  # 회원가입 시 이메일과 이름도 필수로 입력 받습니다.
 
     def __str__(self):
         return self.email  # 이메일을 반환하거나, 필요에 따라 student_id 또는 name을 반환할 수도 있습니다.
