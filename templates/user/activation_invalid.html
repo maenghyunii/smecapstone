@@ -1,0 +1,11 @@
+<html>
+<head><title>Activation Link Invalid</title></head>
+<body>
+    <h1>Activation Link Invalid</h1>
+    <p>Your activation link is invalid or has expired. Please click the button below to request a new activation link.</p>
+    <form action="{% url 'resend_activation_email' user_id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Resend Activation Email</button>
+    </form>
+</body>
+</html>
