@@ -11,6 +11,6 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if not email.endswith('@g.skku.edu'):
+        if not email.endswith(('@g.skku.edu', '@skku.edu')):
             raise forms.ValidationError('Email must be a SKKU email address')
         return email
