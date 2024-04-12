@@ -98,6 +98,12 @@
             width: 48%;
             box-sizing: border-box;
         }
+
+        .messages {
+            color: red; /* 오류 메시지는 빨간색으로 표시 */
+            text-align: center; /* 메시지를 중앙 정렬 */
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +116,13 @@
             <div class="subtitle">SKKU Campus Shuttle Bus Reservation</div>
         </div>
         <div class="login-box">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
                 <label for="username">ID (Email):</label>

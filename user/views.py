@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from Bus.models import Reservation
+from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
@@ -30,13 +31,15 @@ def user_login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=email, password=password)
         if user is not None:
-            if user.is_active == True:
+            if user.is_active:
                 login(request, user)
                 return redirect('home')  # 로그인 성공 시 리다이렉트할 페이지
             else:
-                return HttpResponse("Your account is inactive.")
+                messages.error(request, "Your account is inactive.")
         else:
-            return HttpResponse("Invalid login details.")
+            messages.error(request, "로그인 실패")
+        # 오류 발생 시 같은 페이지에 메시지와 함께 리다이렉트
+        return redirect('login')  # 'login'은 로그인 페이지의 URL 이름입니다.
     else:
         return render(request, 'user/login.html')
 
@@ -70,10 +73,12 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)  # 사용자를 로그인 상태로 만듭니다.
+        # 인증 백엔드 명시
+        user.backend = 'user.authentication.EmailBackend'
+        login(request, user, backend=user.backend)  # 사용자를 로그인 상태로 만듭니다.
         return redirect('home')  # 'home'은 프로젝트에 설정된 홈 페이지의 URL 이름입니다.
     else:
-         # 활성화 링크가 유효하지 않을 때, 이메일 재발송 옵션을 제공
+        # 활성화 링크가 유효하지 않을 때, 이메일 재발송 옵션을 제공
         if user:  # user 객체가 존재하면
             context = {'user_id': user.pk}
             return render(request, 'user/activation_invalid.html', context)
