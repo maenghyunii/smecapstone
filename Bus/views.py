@@ -32,3 +32,6 @@ def toSeoul(request):
         'dates': dates,
     }
     return render(request, 'Bus/toSeoul.html', context)
+
+def board(request):
+    return render(request, 'Bus/board.html')

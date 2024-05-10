@@ -8,4 +8,5 @@ urlpatterns = [
     path('route_selection/', views.route_selection, name='route_selection'),
     path('toSuwon/', views.toSuwon, name='toSuwon'),
     path('toSeoul/', views.toSeoul, name='toSeoul'),
+    path('board/', views.board, name='board'),
 ]

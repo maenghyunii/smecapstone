@@ -7,7 +7,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from .models import User
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from Bus.models import Reservation
 from django.contrib import messages
@@ -94,3 +94,7 @@ def mypage(request):
         'reservations': reservations,
     }
     return render(request, 'user/mypage.html', context)
+
+def user_logout(request):
+    logout(request)
+    return redirect('login') 

@@ -8,5 +8,6 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('mypage/', views.mypage, name='mypage'),
     path('resend_activation_email/<int:user_id>/', resend_activation_email, name='resend_activation_email'),
+    path('logout/', views.user_logout, name='logout')
     # 다른 URL 패턴들...
 ]
