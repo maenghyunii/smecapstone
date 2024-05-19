@@ -4,10 +4,12 @@ from .forms import ReservationForm
 from django.views.decorators.http import require_POST
 import datetime
 from datetime import date, timedelta
+from django.http import HttpResponse
 
 
 def home(request):
     return render(request, 'Bus/home.html')
+
 
 @require_POST
 def route_selection(request):

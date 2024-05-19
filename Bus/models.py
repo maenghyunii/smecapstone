@@ -46,6 +46,28 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.seat} - {self.status}"
+    
+class LostItem(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+class ViolationReport(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+class FreeBoardPost(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
 
 
 # Bus 및 user 모델 수정 필요 : 구현 방법 회의 후 결정 필요
