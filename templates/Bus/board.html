@@ -2,11 +2,221 @@
 <html>
 <head>
     <title>인자신문고</title>
+    <style>
+        body {
+            background-color: #e0f7da;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2, h3, p, label, button {
+            color: #388e3c;
+        }
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #888;
+            padding: 20px;
+            background-color: white;
+            z-index: 1001;
+            border-radius: 10px;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup button {
+            margin-top: 10px;
+        }
+        .board-section {
+            margin-bottom: 30px;
+        }
+        .board-section h2 {
+            border-bottom: 2px solid #388e3c;
+            padding-bottom: 5px;
+        }
+        .board-section form, .board-section ul {
+            margin-top: 15px;
+        }
+        .board-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .board-section ul li {
+            background-color: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .button-container button {
+            background-color: #388e3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button-container button:hover {
+            background-color: #2e7d32;
+        }
+    </style>
+    <script>
+        function openPopup() {
+            document.getElementById('popup-overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function submitPopupForm(event) {
+            event.preventDefault();
+            alert("증원 요청이 완료되었습니다!");
+            closePopup();
+        }
+    </script>
 </head>
 <body>
-    <h1>인자신문고</h1>
-    <p>분실물 관리, 부정 승차, 부정출발 등을 신고할 수 있는 페이지입니다.</p>
-    <!-- 자유롭게 게시판 형태로 내용 추가 -->
-    <p>이곳에 게시판 기능을 구현하세요. (예: Django forms를 사용하여 신고서를 제출할 수 있도록 함)</p>
+    <div class="container">
+        <h1>인자신문고</h1>
+        <p>분실물 관리, 부정 승차, 부정출발 등을 신고할 수 있는 페이지입니다.</p>
+        <a href="{% url 'home' %}">예약하러 가기</a>
+
+        <!-- 버스 증원 요청 버튼 -->
+        <div class="button-container">
+            <button onclick="openPopup()">버스 증원 요청</button>
+        </div>
+
+        <!-- 팝업 창 -->
+        <div id="popup-overlay" class="popup-overlay"></div>
+        <div id="popup" class="popup">
+            <h2>버스 증원 요청</h2>
+            <form id="popupForm" method="post" action="{% url 'submit_bus_request' %}" onsubmit="submitPopupForm(event)">
+                {% csrf_token %}
+                <label for="destination">행선지:</label>
+                <select id="destination" name="destination">
+                    <option value="suwon">수원행</option>
+                    <option value="seoul">서울행</option>
+                </select><br>
+
+                <label for="date">날짜:</label>
+                <input type="date" id="date" name="date"><br>
+
+                <label for="time">시간:</label>
+                <input type="time" id="time" name="time"><br>
+
+                <label for="reason">사유:</label>
+                <textarea id="reason" name="reason"></textarea><br>
+
+                <button type="submit">제출</button>
+                <button type="button" onclick="closePopup()">취소</button>
+            </form>
+        </div>
+
+        <!-- 게시판 섹션 -->
+        <div class="board-section">
+            <h2>분실물 관리</h2>
+            <form method="post" action="{% url 'add_lost_item' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title"><br>
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea><br>
+
+                <button type="submit" name="lost_item_submit">제출</button>
+            </form>
+            <h3>분실물 목록</h3>
+            <ul>
+                {% for lost_item in lost_items %}
+                    <li>
+                        {{ lost_item.title }} - {{ lost_item.content }}
+                        <form method="post" action="{% url 'delete_lost_item' lost_item.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="board-section">
+            <h2>부정출발 신고</h2>
+            <form method="post" action="{% url 'add_report' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title"><br>
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea><br>
+
+                <button type="submit" name="report_submit">제출</button>
+            </form>
+            <h3>신고 목록</h3>
+            <ul>
+                {% for report in reports %}
+                    <li>
+                        {{ report.title }} - {{ report.content }}
+                        <form method="post" action="{% url 'delete_report' report.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="board-section">
+            <h2>자유게시판</h2>
+            <form method="post" action="{% url 'add_post' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title"><br>
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea><br>
+
+                <button type="submit" name="post_submit">제출</button>
+            </form>
+            <h3>게시글 목록</h3>
+            <ul>
+                {% for post in posts %}
+                    <li>
+                        {{ post.title }} - {{ post.content }}
+                        <form method="post" action="{% url 'delete_post' post.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
