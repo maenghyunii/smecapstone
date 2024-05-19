@@ -9,6 +9,8 @@
         #wrapper {
             display: flex;
             justify-content: space-between;
+            align-items: center; /* 추가: 수직 정렬을 중간으로 설정 */
+            height: 80vh; /* 추가: 화면 높이를 설정 */
         }
         #calendar {
             flex: 1;
@@ -22,12 +24,12 @@
             padding: 0;
         }
         #departureTimes li {
-            margin-bottom: 5px;
-            cursor: pointer; /* 클릭 가능함을 나타내는 손가락 모양 커서 */
+            margin-bottom: 20px;
+            cursor: grabbing; /* 클릭 가능함을 나타내는 손가락 모양 커서 */
         }
         
         .fc-day:hover, .fc-day-highlight {
-            background-color: #add8e6 !important; /* 파란색으로 하이라이트 */
+            background-color: #85e374db !important; /* 파란색으로 하이라이트 */
         }
         .pastTime {
             text-decoration: line-through; /* 취소선 */
@@ -101,9 +103,9 @@
                 var departureDateTime = new Date(clickedDate + 'T' + time);
                 if(departureDateTime < now) {
                     // 현재 시간보다 과거의 출발 시간에는 취소선을 적용
-                    departureTimesHtml += '<li class="pastTime">' + time + ' 출발</li>';
+                    departureTimesHtml += `<li class="pastTime">서울행 / ${clickedDate} / ${time} 출발</li>`;
                 } else {
-                    departureTimesHtml += `<li onclick="reserveBus('${time}')">${time} 출발</li>`;
+                    departureTimesHtml += `<li onclick="reserveBus('${clickedDate}', '${time}')">서울행 / ${clickedDate} / ${time} 출발</li>`;
                 }
             });
     
@@ -111,11 +113,11 @@
             document.getElementById('departureTimes').innerHTML = departureTimesHtml;
         }
     
-        function reserveBus(time) {
-            alert("선택한 시간: " + time + "\n여기서 예약 처리 로직을 추가합니다.");
+        function reserveBus(date, time) {
+            alert("선택한 시간: 서울행 / " + date + " / " + time + "\n여기서 예약 처리 로직을 추가합니다.");
             // 예약 페이지로 이동하거나, 예약 관련 모달을 여는 등의 로직을 구현
-            // 예시: window.location.href = 'reservation_page.html?time=' + time;
+            // 예시: window.location.href = 'reservation_page.html?date=' + date + '&time=' + time;
         }
     </script>
-    </body>
+</body>
 </html>
