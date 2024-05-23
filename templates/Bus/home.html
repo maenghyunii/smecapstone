@@ -13,41 +13,63 @@
             font-family: Arial, sans-serif;
         }
 
-        .main-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 20px;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        form {
-            margin: 0 20px;
-            display: inline-block;
-        }
-
-        button {
-            width: 400px;
-            height: 200px;
-            background-color: #44d227a1;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 32px;
-            margin-top: 20px;
-        }
-
         .header {
             width: 100%;
-            padding: 20px 20px;
+            padding: 20px;
             background-color: #343a40;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header div {
+            display: flex;
+            align-items: center;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .header a:hover {
+            color: #ddd;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100% - 160px);
+            padding: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin: 0 20px;
+        }
+
+        button {
+            width: 300px;
+            height: 150px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #218838;
         }
 
         .footer {
@@ -57,12 +79,14 @@
             color: white;
             display: flex;
             justify-content: center;
+            align-items: center;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            bottom: 0;
         }
 
-        .footer a, .header a {
-            color: white;
-            text-decoration: none;
-            margin-left: 10px; /* 마이페이지 링크와 로그아웃 사이의 간격 */
+        .footer span {
+            font-size: 14px;
         }
     </style>
 </head>
@@ -78,11 +102,11 @@
     <div class="main-container">
         <form action="{% url 'toSuwon' %}" method="post">
             {% csrf_token %}
-            <button type="submit">인사캠 출발 - 자과캠 도착</button>
+            <button type="submit">인사캠 &rarr; 자과캠</button>
         </form>
         <form action="{% url 'toSeoul' %}" method="post">
             {% csrf_token %}
-            <button type="submit">자과캠 출발 - 인사캠 도착</button>
+            <button type="submit">자과캠 &rarr; 인사캠</button>
         </form>
     </div>
     <div class="footer">
