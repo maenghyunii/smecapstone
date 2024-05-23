@@ -5,15 +5,17 @@ from django.urls import reverse
 from .tokens import account_activation_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from .models import User, NoShow
+from .models import NoShow  # 수정: User 모델 중복 제거
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from Bus.models import Reservation, LostItem, ViolationReport, FreeBoardPost
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib.auth import get_user_model
+
+User = get_user_model()  # 동적으로 사용자 모델 가져오기
 
 def register(request):
     if request.method == 'POST':
@@ -77,7 +79,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         # 인증 백엔드 명시
-        user.backend = 'user.authentication.EmailBackend'
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user, backend=user.backend)  # 사용자를 로그인 상태로 만듭니다.
         return redirect('home')  # 'home'은 프로젝트에 설정된 홈 페이지의 URL 이름입니다.
     else:
