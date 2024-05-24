@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>인자신문고</title>
+    <style>
+        body {
+            background-color: #e8f5e9; /* 부드러운 초록색 배경 */
+            color: #000; /* 글자 검정색 */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3, p, label, button {
+            color: #000; /* 글자 검정색 */
+        }
+        .container {
+            margin: 40px auto; /* 섹션 간격을 더 넓게 */
+            padding: 40px; /* 패딩을 더 크게 조정 */
+            max-width: 900px; /* 박스 너비를 더 크게 조정 */
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #888;
+            padding: 20px;
+            background-color: white;
+            z-index: 1001;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 80%; /* 너비를 화면의 80%로 설정 */
+            max-width: 600px; /* 최대 너비 설정 */
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup button {
+            margin-top: 10px;
+            background-color: #388e3c; /* 버튼 초록색 */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .popup button:hover {
+            background-color: #2e7d32;
+        }
+        .board-section {
+            margin-bottom: 60px; /* 섹션 간 간격을 넓게 조정 */
+        }
+        .board-section h2 {
+            border-bottom: 2px solid #388e3c;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        .board-section form, .board-section ul {
+            margin-top: 15px;
+        }
+        .board-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .board-section ul li {
+            background-color: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .button-container button {
+            background-color: #388e3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button-container button:hover {
+            background-color: #2e7d32;
+        }
+        label, input, select, textarea {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #c8e6c9;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        function openPopup() {
+            document.getElementById('popup-overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function submitPopupForm(event) {
+            event.preventDefault();
+            alert("증원 요청이 완료되었습니다!");
+            closePopup();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>인자신문고</h1>
+        <p>분실물 관리, 부정승차, 부정출발 등을 신고할 수 있는 페이지입니다.</p>
+        <a href="{% url 'home' %}">예약하러 가기</a>
+
+        <!-- 버스 증원 요청 버튼 -->
+        <div class="button-container">
+            <button onclick="openPopup()">버스 증원 요청</button>
+        </div>
+
+        <!-- 팝업 창 -->
+        <div id="popup-overlay" class="popup-overlay" onclick="closePopup()"></div>
+        <div id="popup" class="popup">
+            <h2>버스 증원 요청</h2>
+            <form id="popupForm" method="post" action="{% url 'submit_bus_request' %}" onsubmit="submitPopupForm(event)">
+                {% csrf_token %}
+                <label for="destination">행선지:</label>
+                <select id="destination" name="destination">
+                    <option value="suwon">수원행</option>
+                    <option value="seoul">서울행</option>
+                </select>
+
+                <label for="date">날짜:</label>
+                <input type="date" id="date" name="date">
+
+                <label for="time">시간:</label>
+                <input type="time" id="time" name="time">
+
+                <label for="reason">사유:</label>
+                <textarea id="reason" name="reason"></textarea>
+
+                <button type="submit">제출</button>
+                <button type="button" onclick="closePopup()">취소</button>
+            </form>
+        </div>
+
+        <!-- 게시판 섹션 -->
+        <div class="board-section">
+            <h2>분실물 관리</h2>
+            <form method="post" action="{% url 'add_lost_item' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title">
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea>
+
+                <button type="submit" name="lost_item_submit">제출</button>
+            </form>
+            <h3>분실물 목록</h3>
+            <ul>
+                {% for lost_item in lost_items %}
+                    <li>
+                        {{ lost_item.title }} - {{ lost_item.content }}
+                        <form method="post" action="{% url 'delete_lost_item' lost_item.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="board-section">
+            <h2>부정출발 신고</h2>
+            <form method="post" action="{% url 'add_report' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title">
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea>
+
+                <button type="submit" name="report_submit">제출</button>
+            </form>
+            <h3>신고 목록</h3>
+            <ul>
+                {% for report in reports %}
+                    <li>
+                        {{ report.title }} - {{ report.content }}
+                        <form method="post" action="{% url 'delete_report' report.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="board-section">
+            <h2>자유게시판</h2>
+            <form method="post" action="{% url 'add_post' %}">
+                {% csrf_token %}
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title">
+
+                <label for="content">내용:</label>
+                <textarea id="content" name="content"></textarea>
+
+                <button type="submit" name="post_submit">제출</button>
+            </form>
+            <h3>게시글 목록</h3>
+            <ul>
+                {% for post in posts %}
+                    <li>
+                        {{ post.title }} - {{ post.content }}
+                        <form method="post" action="{% url 'delete_post' post.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

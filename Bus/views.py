@@ -4,10 +4,12 @@ from .forms import ReservationForm
 from django.views.decorators.http import require_POST
 import datetime
 from datetime import date, timedelta
+from django.http import HttpResponse
 
 
 def home(request):
     return render(request, 'Bus/home.html')
+
 
 @require_POST
 def route_selection(request):
@@ -18,7 +20,7 @@ def route_selection(request):
         return redirect('toSeoul')
 
 def toSuwon(request):
-    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
 
     context = {
         'dates': dates,
@@ -26,9 +28,12 @@ def toSuwon(request):
     return render(request, 'Bus/toSuwon.html', context)
 
 def toSeoul(request):
-    dates = [date.today() + timedelta(days=i) for i in range(8) if (date.today() + timedelta(days=i)).weekday() < 5]
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
 
     context = {
         'dates': dates,
     }
     return render(request, 'Bus/toSeoul.html', context)
+
+def board(request):
+    return render(request, 'Bus/board.html')

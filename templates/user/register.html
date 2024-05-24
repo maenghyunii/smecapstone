@@ -3,12 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .form-group .password-help {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+        .password-warning {
+            color: #FF6347; /* 빨간색 */
+            margin-right: 5px;
+            font-weight: bold; /* 굵은 글꼴 */
+            font-size: 16px; /* 더 큰 글꼴 크기 */
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 30px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h2>Register</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="form-group">
+            <label for="id_email">Email address:</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="id_student_id">Student ID:</label>
+            {{ form.student_id }}
+        </div>
+        <div class="form-group">
+            <label for="id_name">Name:</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}
+            <p class="password-help"><span class="password-warning">!</span> Your password can’t be too similar to your other personal information.</p>
+            <p class="password-help"><span class="password-warning">!</span> Your password must contain at least 8 characters.</p>
+            <p class="password-help"><span class="password-warning">!</span> Your password can’t be a commonly used password.</p>
+            <p class="password-help"><span class="password-warning">!</span> Your password can’t be entirely numeric.</p>
+        </div>
+        <div class="form-group">
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}
+        </div>
         <button type="submit">Register</button>
     </form>
 </body>
