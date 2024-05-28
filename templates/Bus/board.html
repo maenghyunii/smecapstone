@@ -111,6 +111,68 @@
         }
     </style>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const destination = document.getElementById('destination');
+            const date = document.getElementById('date');
+            const time = document.getElementById('time');
+            const today = new Date().toISOString().split('T')[0]; // 현재 날짜를 ISO 형식으로 가져옴
+            const maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() + 3); // 현재 날짜로부터 3일 후
+            const maxDateISO = maxDate.toISOString().split('T')[0];
+            let day = maxDate.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+            // 만약 maxDate가 토요일 또는 일요일이면, 최대 날짜를 다음 주 월요일로 설정
+            if (day === 6) { // 토요일
+                maxDate.setDate(maxDate.getDate() + 2); // 다음 주 월요일로 설정
+            } else if (day === 0) { // 일요일
+                maxDate.setDate(maxDate.getDate() + 1); // 다음 주 월요일로 설정
+            }
+            const dateInput = document.getElementById('date');
+            dateInput.setAttribute('min', today); // 최소 날짜를 오늘로 설정
+            dateInput.setAttribute('max', maxDateISO); // 최대 날짜를 설정
+
+            // 주말 선택 제한
+            dateInput.addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+                const selectedDay = selectedDate.getDay();
+                if (selectedDay === 6 || selectedDay === 0) { // 토요일 또는 일요일
+                    alert("주말에는 선택할 수 없습니다.");
+                    this.value = ''; // 선택한 날짜 초기화
+                }
+            });
+            destination.addEventListener('change', updateTimes);
+            date.addEventListener('change', updateTimes);
+
+            function updateTimes() {
+                const destValue = destination.value;
+                const dateValue = new Date(date.value);
+                const day = dateValue.getDay(); // 0: Sunday, 1: Monday, ..., 5: Friday
+
+                let times = [];
+
+                if (destValue === 'seoul') {
+                    times = ['07:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:15'];
+                    if (day === 5) { // Friday
+                        times[0] = '08:00';
+                    }
+                } else if (destValue === 'suwon') {
+                    times = ['07:00', '10:00', '12:00', '15:00', '16:30', '18:00', '19:00'];
+                    if (day === 5) { // Friday
+                        times[0] = '08:00';
+                    }
+                }
+
+                const timeSelect = document.getElementById('time');
+                timeSelect.innerHTML = ''; // Clear current options
+                times.forEach(t => {
+                    const option = document.createElement('option');
+                    option.value = t;
+                    option.textContent = t;
+                    timeSelect.appendChild(option);
+                });
+            }
+            updateTimes(); // Initialize on load
+        });
+        
         function openPopup() {
             document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
@@ -155,7 +217,7 @@
                 <input type="date" id="date" name="date">
 
                 <label for="time">시간:</label>
-                <input type="time" id="time" name="time">
+                <select id="time" name="time"></select>
 
                 <label for="reason">사유:</label>
                 <textarea id="reason" name="reason"></textarea>
