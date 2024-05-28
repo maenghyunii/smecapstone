@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
+from datetime import date, timedelta
 
 User = get_user_model()  # 동적으로 사용자 모델 가져오기
 
@@ -165,6 +166,8 @@ def delete_post(request, post_id):
     return redirect('injareport')
 
 def submit_bus_request(request):
+    today = date.today()
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
     if request.method == 'POST':
         form = BusRequestForm(request.POST)
         if form.is_valid():
@@ -172,7 +175,13 @@ def submit_bus_request(request):
             # 예: BusRequest 모델에 데이터를 저장하거나, 이메일을 보내는 등의 작업을 수행합니다.
             return HttpResponse("증원 요청이 완료되었습니다!")
     else:
+        dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
         form = BusRequestForm()
+        return render(request, 'Bus/board.html', {'form': form, 'dates': dates})
+    context = {
+    'dates': dates,
+    'form': form,
+    }
     return render(request, 'Bus/board.html', {'form': form})
     
 @login_required
