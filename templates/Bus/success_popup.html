@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert("{{ message }}");
+            window.location.href = "{% url 'home' %}";  // 홈 페이지 URL로 리디렉션
+        });
+    </script>
+</head>
+<body>
+    <p>증원 요청이 완료되었습니다!</p>
+</body>
+</html>

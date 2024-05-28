@@ -205,7 +205,7 @@
         <div id="popup-overlay" class="popup-overlay" onclick="closePopup()"></div>
         <div id="popup" class="popup">
             <h2>버스 증원 요청</h2>
-            <form id="popupForm" method="post" action="{% url 'submit_bus_request' %}" onsubmit="submitPopupForm(event)">
+            <form id="popupForm" method="post" action="{% url 'submit_bus_request' %}">
                 {% csrf_token %}
                 <label for="destination">행선지:</label>
                 <select id="destination" name="destination">
