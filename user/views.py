@@ -194,12 +194,22 @@ def submit_bus_request(request):
 def mypage(request):
     user = request.user
     reservations = Reservation.objects.filter(user=user)
+    
+    # 노쇼 정지 기간 확인
+    no_show_restrictions = NoShow.objects.filter(user=user, date__gte=date.today() - timedelta(days=7))
+    restriction_message = None
+    if no_show_restrictions.exists():
+        latest_no_show = no_show_restrictions.latest('date')
+        days_since_no_show = (date.today() - latest_no_show.date).days
+        days_remaining = 7 - days_since_no_show
+        restriction_message = f"최근 노쇼로 인해 예약이 제한되었습니다. 제한 해제까지 {days_remaining}일 남았습니다."
+
     context = {
         'user': user,
         'reservations': reservations,
+        'restriction_message': restriction_message,
     }
     return render(request, 'user/mypage.html', context)
-
 
 def user_logout(request):
     logout(request)
