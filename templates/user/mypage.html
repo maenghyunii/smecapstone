@@ -63,6 +63,11 @@
         p {
             color: #555;
         }
+        .restriction-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +76,9 @@
         <a href="{% url 'home' %}">예약하러 가기</a>
     </div>
     <div class="container">
+        {% if restriction_message %}
+            <p class="restriction-message">{{ restriction_message }}</p>
+        {% endif %}
         <h2>예약 내역</h2>
         <div id="reservationList">
             {% if reservations %}
