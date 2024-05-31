@@ -1,7 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+
+User = get_user_model()  # 동적으로 사용자 모델 가져오기
 
 class Bus(models.Model):
     name = models.CharField(max_length=100)
@@ -67,6 +69,16 @@ class FreeBoardPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+class BusRequest(models.Model):
+    #user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='busrequest' , on_delete=models.CASCADE)  # 사용자와의 외래키 관계 추가
+    destination = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
+    reason = models.TextField()
+    
+   # def __str__(self):
+    #    return f"{self.user.username} - {self.destination} on {self.date} at {self.time}"
 
 
 
