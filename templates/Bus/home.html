@@ -3,110 +3,154 @@
 <head>
     <title>성균관대 인자셔틀 예약 서비스</title>
     {% load static %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #f8f9fa;
+            width: 100%;
+            overflow-x: hidden; /* 페이지가 옆으로 튀어나가는 것을 방지 */
+            background-color: #f5f5f5; /* SKKU 웹사이트와 유사한 배경색 */
             font-family: Arial, sans-serif;
+        }
+
+        .top-bar {
+            width: 100%;
+            background-color: #00205b; /* 하단 칸과 같은 색상 */
+            color: white;
+            padding: 10px 20px; /* 하단 칸과 같은 위아래 넓이 */
+            text-align: left;
+            font-size: 16px;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header {
             width: 100%;
-            padding: 20px;
-            background-color: #343a40;
-            color: white;
+            padding: 10px 20px; /* 두 번째 칸의 위아래 넓이를 줄임 */
+            background-color: white; /* 배경색 흰색 */
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            border-bottom: 1px solid #d3d3d3; /* 연한 회색 구분선 */
+            position: relative; /* 중앙 정렬을 위한 relative positioning */
         }
 
-        .header div {
+        .header .logo-container {
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
-        .header a {
-            color: white;
+        .header .logo-container .globalskku {
+            position: absolute;
+            left: 20px; /* 좌측에 붙임 */
+            height: 50px; /* 글로벌 리더 이미지 높이 */
+        }
+
+        .header .logo-container .skkulogo {
+            height: 80px; /* 로고 이미지 높이 */
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0; /* 위아래 넓이 감소 */
+            background-color: white; /* 배경색 흰색 */
+            border-bottom: 1px solid #d3d3d3; /* 연한 회색 구분선 */
+        }
+
+        .nav a {
+            margin: 0 30px; /* 링크들 사이의 간격 증가 */
             text-decoration: none;
-            margin-left: 20px;
-            font-size: 18px;
-            transition: color 0.3s ease;
+            color: black; /* 링크 색상 */
+            font-size: 20px; /* 링크 크기 증가 */
         }
 
-        .header a:hover {
-            color: #ddd;
+        .nav a:hover {
+            text-decoration: underline;
         }
 
         .main-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100% - 160px);
+            height: calc(100% - 180px); /* header와 footer의 높이를 제외한 나머지 공간 */
             padding: 20px;
             text-align: center;
         }
 
         form {
             margin: 0 20px;
+            display: inline-block;
         }
 
         button {
-            width: 300px;
-            height: 150px;
-            background-color: #28a745;
+            width: 400px;
+            height: 200px;
+            background-color: #44d227a1;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 32px;
             margin-top: 20px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        button:hover {
-            background-color: #218838;
         }
 
         .footer {
             width: 100%;
             padding: 10px 20px;
-            background-color: #343a40;
+            background-color: #00205b; /* 푸터 색상 */
             color: white;
             display: flex;
             justify-content: center;
-            align-items: center;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
             position: absolute;
             bottom: 0;
         }
 
-        .footer span {
-            font-size: 14px;
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px; /* 마이페이지 링크와 로그아웃 사이의 간격 */
         }
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="top-bar">
         <div>성균관대 인자셔틀 예약 서비스</div>
         <div>
-            <a href="{% url 'board' %}">인자신문고</a>
-            <a href="{% url 'mypage' %}">마이페이지</a>
-            <a href="{% url 'logout' %}">로그아웃</a>
+            <a href="{% url 'logout' %}" style="color: white;">로그아웃</a>
         </div>
+    </div>
+    <div class="header">
+        <div class="logo-container">
+            <img class="globalskku" src="{% static 'images/globalskku.png' %}" alt="The Global Leader, SKKU">
+            <a href="{% url 'home' %}">
+                <img class="skkulogo" src="{% static 'images/skkulogo2.png' %}" alt="성균관대 로고">
+            </a>
+        </div>
+    </div>
+    <div class="nav">
+        <a href="#">미정</a>
+        <a href="#">미정</a>
+        <a href="#">미정</a>
+        <a href="{% url 'board' %}">인자신문고</a>
+        <a href="{% url 'mypage' %}">마이페이지</a>
     </div>
     <div class="main-container">
         <form action="{% url 'toSuwon' %}" method="post">
             {% csrf_token %}
-            <button type="submit">인사캠 &rarr; 자과캠</button>
+            <button type="submit">인사캠 출발 - 자과캠 도착</button>
         </form>
         <form action="{% url 'toSeoul' %}" method="post">
             {% csrf_token %}
-            <button type="submit">자과캠 &rarr; 인사캠</button>
+            <button type="submit">자과캠 출발 - 인사캠 도착</button>
         </form>
     </div>
     <div class="footer">
