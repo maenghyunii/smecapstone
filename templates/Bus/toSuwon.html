@@ -3,47 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <title>수원행 버스 예약</title>
+    {% load static %}
     <link href='https://unpkg.com/fullcalendar@5/main.min.css' rel='stylesheet' />
     <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        #wrapper {
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* 페이지가 옆으로 튀어나가는 것을 방지 */
+            background-color: #f8f9fa; /* 전체 배경색 연한 회색 */
+            font-family: Arial, sans-serif;
+        }
+
+        .top-bar {
+            width: 100%;
+            background-color: #00205b; /* 상단 바 색상 */
+            color: white;
+            padding: 10px 20px; /* 위아래 넓이 */
+            text-align: left;
+            font-size: 16px;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
             display: flex;
             justify-content: space-between;
-            align-items: center; /* 추가: 수직 정렬을 중간으로 설정 */
-            height: 80vh; /* 추가: 화면 높이를 설정 */
+            align-items: center;
         }
-        #calendar {
-            flex: 1;
-            margin-right: 20px; /* 달력과 시간표 사이의 간격 */
+
+        .header {
+            width: 100%;
+            padding: 10px 20px; /* 두 번째 칸의 위아래 넓이를 줄임 */
+            background-color: white; /* 배경색 흰색 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            border-bottom: 1px solid #d3d3d3; /* 연한 회색 구분선 */
+            position: relative; /* 중앙 정렬을 위한 relative positioning */
         }
-        #departureTimes {
-            flex: 1;
+
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
-        #departureTimes ul {
+
+        .header .logo-container .globalskku {
+            position: absolute;
+            left: 20px; /* 좌측에 붙임 */
+            height: 50px; /* 글로벌 리더 이미지 높이 */
+        }
+
+        .header .logo-container .skkulogo {
+            height: 80px; /* 로고 이미지 높이 */
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            min-height: calc(100vh - 60px - 60px); /* 헤더와 푸터 높이를 뺀 나머지 공간 */
+            box-sizing: border-box;
+        }
+
+        .container {
+            padding: 40px;
+            width: 100%; /* 박스 너비를 100%로 설정 */
+            max-width: 1000px; /* 박스 최대 너비 */
+            margin: 20px 0; /* 위아래 마진 */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        ul {
             list-style-type: none;
             padding: 0;
         }
-        #departureTimes li {
-            margin-bottom: 20px; /* 변경: 항목 간의 간격을 넓힘 */
-            cursor: grabbing; /* 클릭 가능함을 나타내는 손가락 모양 커서 */
+
+        ul li {
+            background-color: #f8f9fa;
+            margin: 10px 0;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        
-        .fc-day:hover, .fc-day-highlight {
-            background-color: #85e374db !important; /* 파란색으로 하이라이트 */
+
+        p {
+            color: #555;
         }
-        .pastTime {
-            text-decoration: line-through; /* 취소선 */
-            cursor: default; /* 과거 시간은 클릭할 수 없음을 나타냄 */
+
+        .restriction-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #00205b; /* 푸터 색상 */
+            color: white;
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            position: absolute;
+            bottom: 0;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px; /* 마이페이지 링크와 로그아웃 사이의 간격 */
         }
     </style>
 </head>
 <body>
-    <h1>자과캠으로 가는 버스입니다!</h1>
-    <p>자과캠행 버스 예약 페이지에 오신 것을 환영합니다.</p>
-
-    <div id="wrapper">
-        <div id='calendar'></div>
-        <div id="departureTimes"></div> <!-- 출발 시간을 표시할 공간 -->
+    <div class="top-bar">
+        <div>성균관대 인자셔틀 예약 서비스</div>
+        <div>
+            <a href="{% url 'logout' %}" style="color: white;">로그아웃</a>
+        </div>
+    </div>
+    <div class="header">
+        <div class="logo-container">
+            <img class="globalskku" src="{% static 'images/globalskku.png' %}" alt="The Global Leader, SKKU">
+            <a href="{% url 'home' %}">
+                <img class="skkulogo" src="{% static 'images/skkulogo2.png' %}" alt="성균관대 로고">
+            </a>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <h1>자과캠으로 가는 버스입니다!</h1>
+            <p>자과캠행 버스 예약 페이지에 오신 것을 환영합니다.</p>
+            <div id="wrapper">
+                <div id='calendar'></div>
+                <div id="departureTimes"></div> <!-- 출발 시간을 표시할 공간 -->
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>© 2024-1 시경종설2팀. All rights reserved.</span>
     </div>
 
     <script>
