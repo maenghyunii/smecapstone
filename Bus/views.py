@@ -37,3 +37,12 @@ def toSeoul(request):
 
 def board(request):
     return render(request, 'Bus/board.html')
+
+def reservation(request):
+    date = request.GET.get('date')
+    time = request.GET.get('time')
+    context = {
+        'date': date,
+        'time': time,
+    }
+    return render(request, 'Bus/reservation.html', context)
