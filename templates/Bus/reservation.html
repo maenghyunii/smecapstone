@@ -211,7 +211,7 @@
         submitButton.addEventListener('click', function() {
             if (selectedSeat) {
                 alert('예약이 정상적으로 처리되었습니다.');
-                window.location.href = "home.html";
+                window.location.href = "{% url 'home' %}";
             } else {
                 alert('좌석을 선택해주세요.');
             }
