@@ -6,7 +6,7 @@
     {% load static %}
     <link href='https://unpkg.com/fullcalendar@5/main.min.css' rel='stylesheet' />
     <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body, html {
             margin: 0;
@@ -102,10 +102,10 @@
             color: #555;
         }
 
-        .restriction-message {
-            color: red;
-            font-weight: bold;
-            margin-bottom: 20px;
+        .pastTime {
+            text-decoration: line-through; /* 취소선 */
+            cursor: default; /* 과거 시간은 클릭할 수 없음을 나타냄 */
+            color: #999;
         }
 
         .footer {
@@ -164,7 +164,7 @@
                 '{{ date|date:"Y-m-d" }}',
                 {% endfor %}
             ]; // 예약 가능한 날짜들을 배열로 저장
-    
+
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 events: [
@@ -194,39 +194,37 @@
             });
             calendar.render();
         });
-    
+
         function displayDepartureTimes(clickedDate) {
             // 기본 출발 시간 배열
             var departureTimes = ['07:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:15'];
             var clickedDateTime = new Date(clickedDate);
             var isFriday = clickedDateTime.getDay() === 5; // JS에서 일요일은 0, 금요일은 5
-    
+
             // 금요일일 경우 7:00 출발을 8:00으로 변경
             if(isFriday) {
                 departureTimes[0] = '08:00';
             }
-    
+
             var departureTimesHtml = '<ul>';
             var now = new Date();
-    
+
             departureTimes.forEach(function(time) {
                 var departureDateTime = new Date(clickedDate + 'T' + time);
                 if(departureDateTime < now) {
                     // 현재 시간보다 과거의 출발 시간에는 취소선을 적용
-                    departureTimesHtml += `<li class="pastTime">서울행 / ${clickedDate} / ${time} 출발</li>`;
+                    departureTimesHtml += `<li class="pastTime">서울행 / ${clickedDate} / ${time} 출발 - 예약 불가능</li>`;
                 } else {
                     departureTimesHtml += `<li onclick="reserveBus('${clickedDate}', '${time}')">서울행 / ${clickedDate} / ${time} 출발</li>`;
                 }
             });
-    
+
             departureTimesHtml += '</ul>';
             document.getElementById('departureTimes').innerHTML = departureTimesHtml;
         }
-    
+
         function reserveBus(date, time) {
-            alert("선택한 시간: 서울행 / " + date + " / " + time + "\n여기서 예약 처리 로직을 추가합니다.");
-            // 예약 페이지로 이동하거나, 예약 관련 모달을 여는 등의 로직을 구현
-            // 예시: window.location.href = 'reservation_page.html?date=' + date + '&time=' + time;
+            window.location.href = '{% url "reservation" %}?date=' + date + '&time=' + time;
         }
     </script>
 </body>
