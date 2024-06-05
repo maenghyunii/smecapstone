@@ -41,8 +41,29 @@ def board(request):
 def reservation(request):
     date = request.GET.get('date')
     time = request.GET.get('time')
+    # 필터링
+    seats = Seat.objects.filter(schedule__departure_date=date, schedule__departure_time=time)
     context = {
         'date': date,
         'time': time,
+        'seats': seats,
     }
     return render(request, 'Bus/reservation.html', context)
+
+from django.http import JsonResponse
+
+def check_reservation(request, seat_number):
+  try:
+    seat = Seat.objects.get(seat_number=seat_number)
+    is_reserved = seat.is_reserved
+  except Seat.DoesNotExist:
+    is_reserved = False
+  return JsonResponse({'is_reserved': is_reserved})
+
+def notice(request):
+    return render(request, 'Bus/notice.html')  # 공지사항 템플릿 렌더링
+from django.shortcuts import render
+
+# 정류장 지도 페이지 뷰
+def seoulbus(request):
+    return render(request, 'Bus/seoulbus.html')
