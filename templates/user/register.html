@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>회원가입</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,34 +64,11 @@
     </style>
 </head>
 <body>
-    <h2>Register</h2>
+    <h2>회원가입</h2>
     <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="id_email">Email address:</label>
-            {{ form.email }}
-        </div>
-        <div class="form-group">
-            <label for="id_student_id">Student ID:</label>
-            {{ form.student_id }}
-        </div>
-        <div class="form-group">
-            <label for="id_name">Name:</label>
-            {{ form.name }}
-        </div>
-        <div class="form-group">
-            <label for="id_password1">Password:</label>
-            {{ form.password1 }}
-            <p class="password-help"><span class="password-warning">!</span> Your password can’t be too similar to your other personal information.</p>
-            <p class="password-help"><span class="password-warning">!</span> Your password must contain at least 8 characters.</p>
-            <p class="password-help"><span class="password-warning">!</span> Your password can’t be a commonly used password.</p>
-            <p class="password-help"><span class="password-warning">!</span> Your password can’t be entirely numeric.</p>
-        </div>
-        <div class="form-group">
-            <label for="id_password2">Confirm Password:</label>
-            {{ form.password2 }}
-        </div>
-        <button type="submit">Register</button>
+        {{ form.as_p }}
+        <button type="submit">제출</button>
     </form>
 </body>
 </html>
