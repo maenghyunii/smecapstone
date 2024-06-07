@@ -151,7 +151,7 @@
                 {% if reservations %}
                     <ul>
                         {% for reservation in reservations %}
-                            <li>{{ reservation.seat.schedule.bus.name }} - {{ reservation.seat.schedule.departure_time }} - {{ reservation.seat.schedule.arrival_time }}</li>
+                            <li>행선지: {{ reservation.destination }} | 날짜: {{ reservation.departure_date }} | 시간: {{ reservation.departure_time|date:"H:i" }} | 좌석: {{ reservation.seat }}</li>
                         {% endfor %}
                     </ul>
                 {% else %}

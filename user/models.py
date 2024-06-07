@@ -91,3 +91,21 @@ class Report(models.Model):
 
     def __str__(self):
         return self.title
+
+class Book(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    destination = models.TextField()
+    departure_time = models.TimeField(null=True, blank=True)
+    departure_date = models.DateField(null=True, blank=True)
+    seat = models.IntegerField(default=0)
+
+    def __str__(self):
+        departure_date_str = self.departure_date.strftime('%Y-%m-%d') if self.departure_date else 'N/A'
+        departure_time_str = self.departure_time.strftime('%H:%M') if self.departure_time else 'N/A'
+        return (
+            f"User: {self.user.student_id}, "
+            f"Destination: {self.destination}, "
+            f"Departure Date: {departure_date_str}, "
+            f"Departure Time: {departure_time_str}, "
+            f"Seat: {self.seat}"
+        )
