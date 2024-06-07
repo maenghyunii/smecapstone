@@ -5,7 +5,7 @@ from django.urls import reverse
 from .tokens import account_activation_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from .models import NoShow  # 수정: User 모델 중복 제거
+from .models import NoShow, Book  # 수정: User 모델 중복 제거
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -193,7 +193,8 @@ def submit_bus_request(request):
 @login_required
 def mypage(request):
     user = request.user
-    reservations = Reservation.objects.filter(user=user)
+    reservations = Book.objects.filter(user=user)
+    restriction_message = None
     
     # 노쇼 정지 기간 확인
     no_show_restrictions = NoShow.objects.filter(user=user, date__gte=date.today() - timedelta(days=7))
