@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>공지사항</title>
+    {% load static %}
+    <style>
+        /* 스타일링 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; /* 페이지가 옆으로 튀어나가는 것을 방지 */
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            width: 100%;
+            background-color: #00205b; /* 상단 바 색상 */
+            color: white;
+            padding: 10px 20px; /* 위아래 넓이 */
+            text-align: left;
+            font-size: 16px;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header {
+            width: 100%;
+            padding: 10px 20px; /* 두 번째 칸의 위아래 넓이를 줄임 */
+            background-color: white; /* 배경색 흰색 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            border-bottom: 1px solid #d3d3d3; /* 연한 회색 구분선 */
+            position: relative; /* 중앙 정렬을 위한 relative positioning */
+        }
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .header .logo-container .globalskku {
+            position: absolute;
+            left: 20px;
+            height: 50px;
+        }
+
+        .header .logo-container .skkulogo {
+            height: 80px;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            overflow-wrap: break-word; /* 긴 단어와 링크를 박스 안에 유지 */
+            word-wrap: break-word; /* 긴 단어와 링크를 박스 안에 유지 */
+            word-break: break-word; /* 긴 단어와 링크를 박스 안에 유지 */
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div>성균관대 인자셔틀 예약 서비스</div>
+        <div>
+            <a href="{% url 'logout' %}" style="color: white;">로그아웃</a>
+        </div>
+    </div>
+    <div class="header">
+        <div class="logo-container">
+            <img class="globalskku" src="{% static 'images/globalskku.png' %}" alt="The Global Leader, SKKU">
+            <a href="{% url 'home' %}">
+                <img class="skkulogo" src="{% static 'images/skkulogo2.png' %}" alt="성균관대 로고">
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>2024년 1학기 셔틀버스 공지사항</h2>
+        <p> * 3월 11일 월요일부터 인자노선 자과캠 18시 출발편이 18시 15분 출발로 조정됩니다.<br>
+            * 금요일에 운영되는 학부대학 셔틀은 별도 운행되는 노선입니다.<br>
+            <a href="https://hakbu.skku.edu/hakbu/community/total_notice.do?mode=view&link=http://app.skku.edu/emate_app/bbs/b1805133145.nsf/api/data/documents/unid/B1B2B24C0EEEED3449258AD90006F471?multipart=false&article.offset=0&articleLimit=10&srSearchVal=%EC%85%94%ED%8B%80" target="_blank">해당 페이지</a>를 참고하여 주십시오.
+        </p>
+    </div>
+</body>
+</html>
