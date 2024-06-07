@@ -1,0 +1,24 @@
+<!-- your_app/templates/your_app/manage_no_show.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>No Show Management</title>
+</head>
+<body>
+    <h1>No Show List</h1>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Date</th>
+            <th>Reason</th>
+        </tr>
+        {% for no_show in no_shows %}
+        <tr>
+            <td>{{ no_show.user.username }}</td>
+            <td>{{ no_show.date }}</td>
+            <td>{{ no_show.reason }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

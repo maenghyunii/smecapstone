@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.utils import timezone
 import datetime
 
@@ -32,34 +32,31 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=100, blank=False)  # 이름 필드 추가
-    is_active = models.BooleanField(default=True)
+    name = models.CharField(max_length=100, blank=False)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    no_show_count = models.IntegerField(default=0)  # 노쇼 횟수
-    last_no_show_date = models.DateField(null=True, blank=True)  # 마지막 노쇼 날짜
+    no_show_count = models.IntegerField(default=0)
+    last_no_show_date = models.DateField(null=True, blank=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'  # 이제 학번(사번)이 로그인 식별자가 됩니다.
-    REQUIRED_FIELDS = ['student_id', 'name']  # 회원가입 시 이메일과 이름도 필수로 입력 받습니다.
+    USERNAME_FIELD = 'student_id'
+    REQUIRED_FIELDS = ['email', 'name']
 
     def __str__(self):
-        return self.email  # 이메일을 반환하거나, 필요에 따라 student_id 또는 name을 반환할 수도 있습니다.
+        return self.email
 
     def has_perm(self, perm, obj=None):
-        # 사용자 권한 확인
         return True
 
     def has_module_perms(self, app_label):
-        # 모듈 레벨 권한 확인
         return True
 
     @property
     def is_staff(self):
-        # 관리자 여부 확인
         return self.is_admin
 
-    def record_no_show(self):
+    def record_no_show(self, reason=None):
         """
         사용자가 노쇼할 경우 호출되는 메서드.
         노쇼 횟수를 증가시키고 마지막 노쇼 날짜를 기록합니다.
@@ -68,11 +65,29 @@ class User(AbstractBaseUser):
         self.last_no_show_date = timezone.now().date()
         self.save()
 
+        # NoShow 모델에 기록 추가
+        NoShow.objects.create(user=self, date=self.last_no_show_date, reason=reason)
+
     def check_suspension_status(self):
         """
         노쇼 이후 일정 기간 동안 이용 정지 여부를 확인하는 메서드.
         """
         if self.last_no_show_date and self.no_show_count > 0:
-            suspension_period = datetime.timedelta(days=30)  # 30일간 정지
+            suspension_period = datetime.timedelta(days=30)
             return timezone.now().date() - self.last_no_show_date <= suspension_period
         return False
+
+class NoShow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+    reason = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.student_id} - {self.date}"
+
+class Report(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
