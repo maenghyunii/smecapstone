@@ -1,0 +1,148 @@
+<!-- seoulbus.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>인사캠 셔틀버스</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; /* 페이지가 옆으로 튀어나가는 것을 방지 */
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            width: 100%;
+            background-color: #00205b; /* 상단 바 색상 */
+            color: white;
+            padding: 10px 20px; /* 위아래 넓이 */
+            text-align: left;
+            font-size: 16px;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+        }
+        .header {
+            width: 100%;
+            padding: 10px 20px; /* 두 번째 칸의 위아래 넓이를 줄임 */
+            background-color: white; /* 배경색 흰색 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box; /* padding을 포함하여 박스 크기 계산 */
+            border-bottom: 1px solid #d3d3d3; /* 연한 회색 구분선 */
+            position: relative; /* 중앙 정렬을 위한 relative positioning */
+        }
+        .header .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .header .logo-container .globalskku {
+            position: absolute;
+            left: 20px;
+            height: 50px;
+        }
+        .header .logo-container .skkulogo {
+            height: 80px;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h2 {
+            color:
+             #333;
+        }
+        h3 {
+            color: #30ab44;
+        }
+        .box {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #555;
+            margin: 10px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #00205b;
+            color: white;
+            border-radius: 10px;
+        }
+        .live-info {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #30ab44;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .live-info:hover {
+            background-color: #30ab44;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <div class="top-bar">
+        <div>성균관대 인자셔틀 예약 서비스</div>
+        <div>
+            <a href="{% url 'logout' %}">로그아웃</a>
+        </div>
+    </div>
+    <div class="header">
+        <div class="logo-container">
+            <img class="globalskku" src="{% static 'images/globalskku.png' %}" alt="The Global Leader, SKKU">
+            <a href="{% url 'home' %}">
+                <img class="skkulogo" src="{% static 'images/skkulogo2.png' %}" alt="성균관대 로고">
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>인사캠 셔틀버스 - 2024년 1학기</h2>
+        <div class="box">
+            <h3>정류장</h3>
+            <p>혜화역 1번 출구 → 학교진입로 앞 정류소(올레AS센터 성균관대입구점 맞은편) → 성균관대학교 정문 → 600주년 기념관 → 정차소(농구장옆)</p>
+        </div>
+        <div class="box">
+            <h3>요금</h3>
+            <p>400원</p>
+            <p>※ 결제수단 : 체크/신용카드(후불교통결제 기능 가능한 카드에 한함), T머니/캐시비카드</p>
+            <p>* 현금, 회수권 사용 불가</p>
+        </div>
+        <div class="box">
+            <h3>운행시간</h3>
+            <p>[학기중] 월요일~금요일: 07:00 ~ 23:00, 토요일/일요일/공휴일/학교 휴일: 운행없음</p>
+            <p>[방학중] 월요일~금요일: 07:00 ~ 19:00, 토요일/일요일/공휴일/학교 휴일: 운행없음</p>
+        </div>
+        <div class="footer">
+            상기 콘텐츠 담당학생지원팀 (02-760-1073)
+            <br>
+            관리팀(인사캠) (인사캠 셔틀 · 02-760-0110)
+            <br>
+            <a class="live-info" href="http://route.hellobus.co.kr:8787/pub/routeView/skku/bis_view.html" target="_blank">실시간 운행정보 보기</a>
+        </div>
+    </div>
+</body>
+</html>

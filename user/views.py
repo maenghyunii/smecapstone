@@ -5,15 +5,17 @@ from django.urls import reverse
 from .tokens import account_activation_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from .models import NoShow  # 수정: User 모델 중복 제거
+from .models import NoShow, Book  # 수정: User 모델 중복 제거
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from Bus.models import Reservation, LostItem, ViolationReport, FreeBoardPost
+from Bus.models import Reservation, LostItem, ViolationReport, FreeBoardPost, BusRequest
 from django.contrib import messages
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
+from datetime import date, timedelta
+from django.contrib.admin.views.decorators import staff_member_required
 
 User = get_user_model()  # 동적으로 사용자 모델 가져오기
 
@@ -164,27 +166,51 @@ def delete_post(request, post_id):
     post.delete()
     return redirect('injareport')
 
+
 def submit_bus_request(request):
+    dates = [date.today() + timedelta(days=i) for i in range(4) if (date.today() + timedelta(days=i)).weekday() < 5]
+    
     if request.method == 'POST':
         form = BusRequestForm(request.POST)
         if form.is_valid():
-            # 여기서 form.cleaned_data를 사용하여 데이터를 처리할 수 있습니다.
-            # 예: BusRequest 모델에 데이터를 저장하거나, 이메일을 보내는 등의 작업을 수행합니다.
-            return HttpResponse("증원 요청이 완료되었습니다!")
+            bus_request = BusRequest(
+                #user=request.user,
+                destination=form.cleaned_data['destination'],
+                date=form.cleaned_data['date'],
+                time=form.cleaned_data['time'],
+                reason=form.cleaned_data['reason']
+            )
+            bus_request.save()
+            return render(request, 'Bus/success_popup.html', {'message': "증원 요청이 완료되었습니다!"})
+        else:
+            print("Form is not valid")
+            print(form.errors)  # 폼 에러 출력
     else:
         form = BusRequestForm()
-    return render(request, 'Bus/board.html', {'form': form})
-    
+
+    return render(request, 'Bus/board.html', {'form': form, 'dates': dates})
+
 @login_required
 def mypage(request):
     user = request.user
-    reservations = Reservation.objects.filter(user=user)
+    reservations = Book.objects.filter(user=user)
+    restriction_message = None
+    
+    # 노쇼 정지 기간 확인
+    no_show_restrictions = NoShow.objects.filter(user=user, date__gte=date.today() - timedelta(days=7))
+    restriction_message = None
+    if no_show_restrictions.exists():
+        latest_no_show = no_show_restrictions.latest('date')
+        days_since_no_show = (date.today() - latest_no_show.date).days
+        days_remaining = 7 - days_since_no_show
+        restriction_message = f"최근 노쇼로 인해 예약이 제한되었습니다. 제한 해제까지 {days_remaining}일 남았습니다."
+
     context = {
         'user': user,
         'reservations': reservations,
+        'restriction_message': restriction_message,
     }
     return render(request, 'user/mypage.html', context)
-
 
 def user_logout(request):
     logout(request)
@@ -197,3 +223,9 @@ def is_superuser(user):
 def manage_no_show(request):
     no_shows = NoShow.objects.all()
     return render(request, 'user/manage_no_show.html', {'no_shows': no_shows})
+
+@staff_member_required
+def admin_bus_requests(request):
+    # 관리자가 볼 수 있는 페이지에 이전에 제출된 모든 증원 요청을 표시
+    requests = BusRequest.objects.all()
+    return render(request, 'admin_bus_requests.html', {'requests': requests})
